@@ -30,10 +30,13 @@ $warehouses = $pdo->query("SELECT * FROM warehouse")->fetchAll();
 
 // Handle the update request
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $sql = "UPDATE parcels SET tracking_number = ?, weight = ?, status = ?, warehouse_id = ? WHERE parcel_id = ?";
+    $current_editor_id = $_SESSION['user_id'];
+
+
+    $sql = "UPDATE parcels SET tracking_number = ?, weight = ?, status = ?, warehouse_id = ?, last_updated_by = ? WHERE parcel_id = ?";
     $stmt = $pdo->prepare($sql);
 
-    if ($stmt->execute([$_POST['tracking'], $_POST['weight'], $_POST['status'], $_POST['warehouse_id'], $id])) {
+    if ($stmt->execute([$_POST['tracking'], $_POST['weight'], $_POST['status'], $_POST['warehouse_id'], $current_editor_id, $id])) {
         echo "<script>
                 alert('Updated successfully!');
                 window.location.href = 'index.php';
