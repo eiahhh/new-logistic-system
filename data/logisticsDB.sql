@@ -20,3 +20,8 @@ ALTER TABLE warehouse
 ADD COLUMN added_by INT,
 ADD COLUMN last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 ADD FOREIGN KEY (added_by) REFERENCES users(user_id);
+
+-- add column to parcels table
+ALTER TABLE parcels
+ADD COLUMN last_updated_by INT,
+ADD FOREIGN KEY (last_updated_by) REFERENCES users(user_id);
