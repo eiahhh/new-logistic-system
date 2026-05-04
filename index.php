@@ -9,10 +9,11 @@ if (!isset($_SESSION['user_id'])) {
 require 'core/dbConfig.php'; 
 
 // Fetch all parcels with their warehouse names
-$stmt = $pdo->query("SELECT parcels.*, warehouse.location_name, users.username AS un 
+$stmt = $pdo->query("SELECT parcels.*, warehouse.location_name, u1.username AS creator_name, u2.username AS editor_name 
                     FROM parcels 
                     LEFT JOIN warehouse ON parcels.warehouse_id = warehouse.warehouse_id
-                    LEFT JOIN users ON parcels.added_by = users.user_id");
+                    LEFT JOIN users AS u1 ON parcels.added_by = u1.user_id
+                    LEFT JOIN users AS u2 ON parcels.last_updated_by = u2.user_id");
 $parcels = $stmt->fetchAll();
 ?>
 
@@ -44,7 +45,8 @@ $parcels = $stmt->fetchAll();
                 <th>Status</th>
                 <th>Warehouse</th>
                 <th>Added by</th>
-                <th>Last Updated</th>
+                <th>Last Updated By</th>
+                <th>Last Updated Time</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -55,7 +57,8 @@ $parcels = $stmt->fetchAll();
                 <td><?= htmlspecialchars($p['weight']) ?></td>
                 <td><?= htmlspecialchars($p['status']) ?></td>
                 <td><?= htmlspecialchars($p['location_name']) ?></td>
-                <td><?= htmlspecialchars($p['un']) ?></td>
+                <td><?= htmlspecialchars($p['creator_name']) ?></td>
+                <td><?= htmlspecialchars($p['editor_name']) ?></td>
                 <td><?= htmlspecialchars($p['last_updated']) ?></td>
                 <td>
                     <a href="update.php?id=<?= $p['parcel_id'] ?>" class="btn btn-sm btn-warning">Edit</a>
